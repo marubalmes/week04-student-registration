@@ -1,15 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', [StudentController::class, 'index'])
     ->name('students.index');
 
-Route::get('/register', [StudentController::class, 'create'])
+Route::get('/students/create', [StudentController::class, 'create'])
     ->name('students.create');
 
-Route::post('/register', [StudentController::class, 'store'])
+Route::post('/students', [StudentController::class, 'store'])
     ->name('students.store');
 
 Route::get('/students/{student}', [StudentController::class, 'show'])

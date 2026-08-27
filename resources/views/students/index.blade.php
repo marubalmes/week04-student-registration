@@ -1,205 +1,193 @@
 @extends('layouts.app')
 
-@section('title', 'Student Directory | Student Registration System')
+@section(
+    'title',
+    'Student Directory | Student Registration System'
+)
 
 @section('content')
 
-<div class="max-w-7xl mx-auto px-6 py-10">
+<section class="page-section">
 
-    <!-- Hero Section -->
+    <div class="container">
 
-    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
+        <div class="page-header">
 
-        <div>
+            <div>
 
-            <div class="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700 mb-4">
+                <span class="eyebrow">
+                    Student Management Portal
+                </span>
 
-                Student Management Portal
+                <h1>
+                    Student Directory
+                </h1>
+
+                <p>
+                    View and manage registered student information
+                    in one organized location.
+                </p>
 
             </div>
 
-            <h2 class="text-4xl font-bold tracking-tight text-slate-900">
 
-                Student Directory
-
-            </h2>
-
-            <p class="mt-3 text-slate-500 max-w-xl">
-
-                Manage registered student information through a secure,
-                organized, and centralized registration system.
-
-            </p>
-
-        </div>
-
-        <a href="{{ route('students.create') }}"
-           class="sm:hidden inline-flex justify-center rounded-lg bg-blue-600 px-5 py-3 font-semibold text-white transition hover:bg-blue-700">
-
-            + Register Student
-
-        </a>
-
-    </div>
-
-
-    <!-- Statistics -->
-
-    <div class="grid md:grid-cols-3 gap-5 mb-10">
-
-        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-
-            <p class="text-sm font-medium text-slate-500">
-
-                Total Students
-
-            </p>
-
-            <p class="text-4xl font-bold text-slate-900 mt-3">
-
-                {{ $students->count() }}
-
-            </p>
-
-            <p class="text-sm text-slate-400 mt-2">
-
-                Registered records
-
-            </p>
+            <a
+                href="{{ route('students.create') }}"
+                class="btn btn-primary"
+            >
+                + Register Student
+            </a>
 
         </div>
 
 
-        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <!-- Statistics -->
 
-            <p class="text-sm font-medium text-slate-500">
+        <section class="stats-grid">
 
-                Registration Status
+            <article class="stat-card">
 
-            </p>
+                <span class="stat-label">
+                    Total Students
+                </span>
 
-            <p class="text-xl font-semibold text-green-600 mt-4">
+                <strong class="stat-value">
+                    {{ $students->count() }}
+                </strong>
 
-                System Active
+                <span class="stat-description">
+                    Registered student records
+                </span>
 
-            </p>
-
-            <p class="text-sm text-slate-400 mt-2">
-
-                Database connection operational
-
-            </p>
-
-        </div>
+            </article>
 
 
-        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+            <article class="stat-card">
 
-            <p class="text-sm font-medium text-slate-500">
+                <span class="stat-label">
+                    Directory Status
+                </span>
 
-                Latest Activity
+                <strong class="status-active">
+                    Active
+                </strong>
 
-            </p>
+                <span class="stat-description">
+                    Student records available
+                </span>
 
-            <p class="text-xl font-semibold text-slate-900 mt-4">
-
-                @if($students->count())
-                    {{ $students->first()->created_at->diffForHumans() }}
-                @else
-                    No registrations yet
-                @endif
-
-            </p>
-
-            <p class="text-sm text-slate-400 mt-2">
-
-                Student registration activity
-
-            </p>
-
-        </div>
-
-    </div>
+            </article>
 
 
-    <!-- Directory -->
+            <article class="stat-card">
 
-    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+                <span class="stat-label">
+                    Latest Registration
+                </span>
 
-        <div class="p-6 border-b border-slate-200">
+                <strong class="stat-text">
 
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    @if($students->count())
+                        {{ $students->first()->created_at->diffForHumans() }}
+                    @else
+                        No records yet
+                    @endif
+
+                </strong>
+
+                <span class="stat-description">
+                    Based on system records
+                </span>
+
+            </article>
+
+        </section>
+
+
+        <!-- Directory -->
+
+        <section class="directory-panel">
+
+            <div class="directory-header">
 
                 <div>
 
-                    <h3 class="text-xl font-bold text-slate-900">
-
+                    <h2>
                         Registered Students
+                    </h2>
 
-                    </h3>
-
-                    <p class="text-sm text-slate-500 mt-1">
-
-                        Browse and view registered student profiles.
-
+                    <p>
+                        Search by name, Student ID, or program.
                     </p>
 
                 </div>
 
 
-                <!-- Search -->
-
-                <div class="relative">
+                <div class="search-wrapper">
 
                     <input
-                        type="text"
+                        type="search"
                         id="studentSearch"
                         placeholder="Search students..."
-                        class="w-full md:w-72 rounded-lg border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                        aria-label="Search students"
                     >
 
                 </div>
 
             </div>
 
-        </div>
 
+            @if($students->count())
 
-        @if($students->count())
-
-            <div class="p-6">
-
-                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"
-                     id="studentGrid">
+                <div
+                    class="student-grid"
+                    id="studentGrid"
+                >
 
                     @foreach($students as $student)
 
                         <a
                             href="{{ route('students.show', $student) }}"
-                            class="student-card group block rounded-2xl border border-slate-200 bg-white p-5 transition duration-200 hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg"
+                            class="student-card"
+                            data-search="
+                                {{ strtolower(
+                                    $student->first_name . ' ' .
+                                    $student->middle_name . ' ' .
+                                    $student->last_name . ' ' .
+                                    $student->student_id . ' ' .
+                                    $student->program
+                                ) }}
+                            "
                         >
 
-                            <div class="flex items-center gap-4">
+                            <div class="student-card-top">
 
                                 <img
-                                    src="{{ asset('storage/' . $student->profile_picture) }}"
-                                    alt="{{ $student->first_name }} {{ $student->last_name }}"
-                                    class="w-16 h-16 rounded-2xl object-cover ring-1 ring-slate-200"
+                                    src="{{ asset(
+                                        'storage/' .
+                                        $student->profile_picture
+                                    ) }}"
+                                    alt="Profile picture of {{ $student->first_name }} {{ $student->last_name }}"
+                                    class="student-avatar"
                                 >
 
-                                <div class="min-w-0">
 
-                                    <h4 class="student-name truncate font-bold text-slate-900 group-hover:text-blue-600">
+                                <div class="student-main-info">
+
+                                    <h3>
 
                                         {{ $student->first_name }}
+
+                                        @if($student->middle_name)
+                                            {{ $student->middle_name }}
+                                        @endif
+
                                         {{ $student->last_name }}
 
-                                    </h4>
+                                    </h3>
 
-                                    <p class="student-id text-sm text-slate-500">
-
+                                    <p>
                                         {{ $student->student_id }}
-
                                     </p>
 
                                 </div>
@@ -207,23 +195,15 @@
                             </div>
 
 
-                            <div class="mt-5 pt-4 border-t border-slate-100">
+                            <div class="student-card-footer">
 
-                                <div class="flex items-center justify-between">
+                                <span>
+                                    {{ $student->program }}
+                                </span>
 
-                                    <span class="text-sm text-slate-500">
-
-                                        {{ $student->program }}
-
-                                    </span>
-
-                                    <span class="rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
-
-                                        {{ $student->year_level }}
-
-                                    </span>
-
-                                </div>
+                                <span class="year-badge">
+                                    {{ $student->year_level }}
+                                </span>
 
                             </div>
 
@@ -233,78 +213,55 @@
 
                 </div>
 
-            </div>
 
-        @else
+                <div
+                    id="noSearchResults"
+                    class="search-empty-state hidden"
+                >
 
-            <div class="px-6 py-20 text-center">
+                    <h3>
+                        No students found
+                    </h3>
 
-                <div class="mx-auto w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center text-3xl">
-
-                    🎓
+                    <p>
+                        Try searching with a different name,
+                        Student ID, or program.
+                    </p>
 
                 </div>
 
-                <h3 class="mt-5 text-xl font-bold text-slate-900">
+            @else
 
-                    No students registered yet
+                <div class="empty-state">
 
-                </h3>
+                    <div class="empty-icon">
+                        🎓
+                    </div>
 
-                <p class="mt-2 text-slate-500">
+                    <h3>
+                        No students registered yet
+                    </h3>
 
-                    Start building your student directory by registering
-                    the first student.
+                    <p>
+                        Start building the student directory
+                        by registering the first student.
+                    </p>
 
-                </p>
+                    <a
+                        href="{{ route('students.create') }}"
+                        class="btn btn-primary"
+                    >
+                        Register First Student
+                    </a>
 
-                <a href="{{ route('students.create') }}"
-                   class="inline-flex mt-6 rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
+                </div>
 
-                    Register First Student
+            @endif
 
-                </a>
-
-            </div>
-
-        @endif
+        </section>
 
     </div>
 
-</div>
-
-
-<script>
-
-const searchInput = document.getElementById('studentSearch');
-
-if (searchInput) {
-
-    searchInput.addEventListener('input', function () {
-
-        const query = this.value.toLowerCase();
-
-        document.querySelectorAll('.student-card').forEach(card => {
-
-            const name = card.querySelector('.student-name')
-                .textContent
-                .toLowerCase();
-
-            const id = card.querySelector('.student-id')
-                .textContent
-                .toLowerCase();
-
-            card.style.display =
-                name.includes(query) || id.includes(query)
-                    ? ''
-                    : 'none';
-
-        });
-
-    });
-
-}
-
-</script>
+</section>
 
 @endsection

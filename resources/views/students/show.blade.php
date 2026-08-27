@@ -1,156 +1,104 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+@extends('layouts.app')
 
-    <meta charset="UTF-8">
+@section(
+    'title',
+    $student->first_name . ' ' .
+    $student->last_name .
+    ' | Student Profile'
+)
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+@section('content')
 
-    <title>Student Profile</title>
+<section class="page-section">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <div class="profile-container">
 
-</head>
 
-<body class="bg-gray-100 min-h-screen">
+        @if(session('success'))
 
-<div class="max-w-4xl mx-auto px-6 py-10">
+            <div
+                class="toast-success"
+                role="status"
+            >
 
-    @if(session('success'))
+                <div class="success-icon">
+                    ✓
+                </div>
 
-        <div class="bg-green-100 border border-green-300 text-green-700 px-5 py-4 rounded-lg mb-6">
+                <div>
 
-            {{ session('success') }}
+                    <strong>
+                        Registration Successful
+                    </strong>
 
-        </div>
+                    <p>
+                        {{ session('success') }}
+                    </p>
 
-    @endif
+                </div>
 
-    <div class="mb-6">
+            </div>
 
-        <a href="{{ route('students.index') }}"
-           class="text-blue-600 hover:underline">
+        @endif
 
-            ← Back to Students
 
+        <a
+            href="{{ route('students.index') }}"
+            class="back-link"
+        >
+            ← Back to Student Directory
         </a>
 
-    </div>
 
-    <div class="bg-white shadow-md rounded-xl overflow-hidden">
+        <section class="profile-card">
 
-        <div class="p-8">
 
-            <div class="flex flex-col md:flex-row gap-8 items-center md:items-start">
+            <!-- PROFILE HEADER -->
+
+            <div class="profile-hero">
 
                 <img
-                    src="{{ asset('storage/' . $student->profile_picture) }}"
-                    alt="Student Profile Picture"
-                    class="w-40 h-40 rounded-full object-cover border"
+                    src="{{ asset(
+                        'storage/' .
+                        $student->profile_picture
+                    ) }}"
+                    alt="Profile picture of {{ $student->first_name }} {{ $student->last_name }}"
+                    class="profile-image"
                 >
 
-                <div class="flex-1">
 
-                    <h1 class="text-3xl font-bold text-gray-800">
+                <div>
+
+                    <span class="profile-label">
+                        Student Profile
+                    </span>
+
+                    <h1>
 
                         {{ $student->first_name }}
-                        {{ $student->middle_name }}
+
+                        @if($student->middle_name)
+                            {{ $student->middle_name }}
+                        @endif
+
                         {{ $student->last_name }}
 
                     </h1>
 
-                    <p class="text-gray-500 mt-1">
-
-                        Student ID: {{ $student->student_id }}
-
+                    <p class="profile-student-id">
+                        Student ID · {{ $student->student_id }}
                     </p>
 
-                    <div class="grid md:grid-cols-2 gap-5 mt-8">
 
-                        <div>
+                    <div class="profile-tags">
 
-                            <p class="text-sm text-gray-500">
-                                Email Address
-                            </p>
+                        <span>
+                            {{ $student->program }}
+                        </span>
 
-                            <p class="font-medium">
-                                {{ $student->email }}
-                            </p>
-
-                        </div>
-
-                        <div>
-
-                            <p class="text-sm text-gray-500">
-                                Mobile Number
-                            </p>
-
-                            <p class="font-medium">
-                                {{ $student->mobile_number }}
-                            </p>
-
-                        </div>
-
-                        <div>
-
-                            <p class="text-sm text-gray-500">
-                                Date of Birth
-                            </p>
-
-                            <p class="font-medium">
-                                {{ $student->date_of_birth }}
-                            </p>
-
-                        </div>
-
-                        <div>
-
-                            <p class="text-sm text-gray-500">
-                                Gender
-                            </p>
-
-                            <p class="font-medium">
-                                {{ $student->gender }}
-                            </p>
-
-                        </div>
-
-                        <div>
-
-                            <p class="text-sm text-gray-500">
-                                Program
-                            </p>
-
-                            <p class="font-medium">
-                                {{ $student->program }}
-                            </p>
-
-                        </div>
-
-                        <div>
-
-                            <p class="text-sm text-gray-500">
-                                Year Level
-                            </p>
-
-                            <p class="font-medium">
-                                {{ $student->year_level }}
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    <div class="mt-6">
-
-                        <p class="text-sm text-gray-500">
-                            Address
-                        </p>
-
-                        <p class="font-medium">
-                            {{ $student->address }}
-                        </p>
+                        <span>
+                            {{ $student->year_level }}
+                        </span>
 
                     </div>
 
@@ -158,11 +106,151 @@
 
             </div>
 
-        </div>
+
+            <div class="profile-content">
+
+
+                <!-- PERSONAL -->
+
+                <section class="profile-section">
+
+                    <h2>
+                        Personal Information
+                    </h2>
+
+
+                    <div class="info-list">
+
+                        <div class="info-item">
+
+                            <span>
+                                Email Address
+                            </span>
+
+                            <strong>
+                                {{ $student->email }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span>
+                                Mobile Number
+                            </span>
+
+                            <strong>
+                                {{ $student->mobile_number }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span>
+                                Date of Birth
+                            </span>
+
+                            <strong>
+                                {{ $student->date_of_birth->format('F d, Y') }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span>
+                                Gender
+                            </span>
+
+                            <strong>
+                                {{ $student->gender }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- ACADEMIC -->
+
+                <section class="profile-section">
+
+                    <h2>
+                        Academic Information
+                    </h2>
+
+
+                    <div class="info-list">
+
+                        <div class="info-item">
+
+                            <span>
+                                Program
+                            </span>
+
+                            <strong>
+                                {{ $student->program }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span>
+                                Year Level
+                            </span>
+
+                            <strong>
+                                {{ $student->year_level }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span>
+                                Registration Date
+                            </span>
+
+                            <strong>
+                                {{ $student->created_at->format('F d, Y') }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+            <!-- ADDRESS -->
+
+            <section class="address-section">
+
+                <h2>
+                    Residential Address
+                </h2>
+
+                <p>
+                    {{ $student->address }}
+                </p>
+
+            </section>
+
+        </section>
 
     </div>
 
-</div>
+</section>
 
-</body>
-</html>
+@endsection

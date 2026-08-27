@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'student_id',
         'first_name',
@@ -13,11 +16,15 @@ class Student extends Model
         'last_name',
         'email',
         'mobile_number',
-        'gender',
         'date_of_birth',
+        'gender',
         'program',
         'year_level',
         'address',
         'profile_picture',
+    ];
+
+    protected $casts = [
+        'date_of_birth' => 'date',
     ];
 }

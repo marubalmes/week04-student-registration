@@ -1,795 +1,628 @@
 @extends('layouts.app')
 
-@section('title', 'Register Student | Student Registration System')
+@section(
+    'title',
+    'Register Student | Student Registration System'
+)
 
 @section('content')
 
-<div class="max-w-5xl mx-auto px-6 py-10">
+<section class="page-section">
 
-    <!-- Page Header -->
+    <div class="form-container">
 
-    <div class="mb-10">
-
-        <a href="{{ route('students.index') }}"
-           class="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-700">
-
+        <a
+            href="{{ route('students.index') }}"
+            class="back-link"
+        >
             ← Back to Student Directory
-
         </a>
 
-        <div class="mt-5">
 
-            <div class="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700">
+        <div class="form-page-header">
 
+            <span class="eyebrow">
                 New Registration
+            </span>
 
-            </div>
-
-            <h2 class="mt-4 text-4xl font-bold tracking-tight text-slate-900">
-
+            <h1>
                 Register a Student
+            </h1>
 
-            </h2>
-
-            <p class="mt-3 text-slate-500 max-w-2xl">
-
-                Complete the student information below. All required fields
-                will be validated before the registration is processed.
-
+            <p>
+                Complete all required information below.
+                The information will be validated before
+                the registration is saved.
             </p>
 
         </div>
 
-    </div>
 
+        @if($errors->any())
 
-    <!-- Validation Errors -->
+            <div
+                class="alert alert-error"
+                role="alert"
+            >
 
-    @if ($errors->any())
+                <strong>
+                    Please review the information below.
+                </strong>
 
-        <div class="mb-8 rounded-2xl border border-red-200 bg-red-50 p-5">
+                <ul>
 
-            <div class="flex gap-4">
+                    @foreach($errors->all() as $error)
 
-                <div>
+                        <li>
+                            {{ $error }}
+                        </li>
 
-                    <h3 class="font-semibold text-red-800">
+                    @endforeach
 
-                        Please review the form
-
-                    </h3>
-
-                    <p class="text-sm text-red-600 mt-1">
-
-                        Some information needs to be corrected before
-                        the student can be registered.
-
-                    </p>
-
-                    <ul class="mt-3 list-disc list-inside text-sm text-red-700">
-
-                        @foreach ($errors->all() as $error)
-
-                            <li>{{ $error }}</li>
-
-                        @endforeach
-
-                    </ul>
-
-                </div>
+                </ul>
 
             </div>
 
-        </div>
-
-    @endif
+        @endif
 
 
-    <form
-        action="{{ route('students.store') }}"
-        method="POST"
-        enctype="multipart/form-data"
-        class="space-y-8"
-    >
+        <form
+            action="{{ route('students.store') }}"
+            method="POST"
+            enctype="multipart/form-data"
+            id="studentRegistrationForm"
+        >
 
-        @csrf
+            @csrf
 
 
-        <!-- Personal Information -->
+            <!-- PERSONAL INFORMATION -->
 
-        <section class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+            <section class="form-section">
 
-            <div class="border-b border-slate-200 px-6 py-5">
+                <div class="section-heading">
 
-                <div class="flex items-center gap-4">
-
-                    <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold">
-
+                    <span class="section-number">
                         01
-
-                    </div>
+                    </span>
 
                     <div>
 
-                        <h3 class="font-bold text-slate-900">
-
+                        <h2>
                             Personal Information
+                        </h2>
 
-                        </h3>
-
-                        <p class="text-sm text-slate-500">
-
-                            Basic identification and contact details.
-
+                        <p>
+                            Student identification and contact details.
                         </p>
 
                     </div>
 
                 </div>
 
-            </div>
 
+                <div class="form-grid">
 
-            <div class="p-6 grid md:grid-cols-2 gap-6">
+                    <div class="form-group">
 
+                        <label for="student_id">
+                            Student ID *
+                        </label>
 
-                <!-- Student ID -->
+                        <input
+                            type="text"
+                            id="student_id"
+                            name="student_id"
+                            value="{{ old('student_id') }}"
+                            placeholder="Example: 2026-0001"
+                            required
+                        >
 
-                <div>
-
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
-
-                        Student ID
-
-                    </label>
-
-                    <input
-                        type="text"
-                        name="student_id"
-                        value="{{ old('student_id') }}"
-                        placeholder="e.g. 2026-0001"
-                        class="w-full rounded-xl border px-4 py-3 outline-none transition
                         @error('student_id')
-                            border-red-400 bg-red-50
-                        @else
-                            border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100
-                        @enderror"
-                    >
 
-                    @error('student_id')
+                            <span class="field-error">
+                                {{ $message }}
+                            </span>
 
-                        <p class="mt-2 text-sm text-red-600">
+                        @enderror
 
-                            {{ $message }}
-
-                        </p>
-
-                    @enderror
-
-                </div>
+                    </div>
 
 
-                <!-- Email -->
+                    <div class="form-group">
 
-                <div>
+                        <label for="email">
+                            Email Address *
+                        </label>
 
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value="{{ old('email') }}"
+                            placeholder="student@example.com"
+                            required
+                        >
 
-                        Email Address
-
-                    </label>
-
-                    <input
-                        type="email"
-                        name="email"
-                        value="{{ old('email') }}"
-                        placeholder="student@example.com"
-                        class="w-full rounded-xl border px-4 py-3 outline-none transition
                         @error('email')
-                            border-red-400 bg-red-50
-                        @else
-                            border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100
-                        @enderror"
-                    >
 
-                    @error('email')
+                            <span class="field-error">
+                                {{ $message }}
+                            </span>
 
-                        <p class="mt-2 text-sm text-red-600">
+                        @enderror
 
-                            {{ $message }}
+                    </div>
 
+
+                    <div class="form-group">
+
+                        <label for="first_name">
+                            First Name *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="first_name"
+                            name="first_name"
+                            value="{{ old('first_name') }}"
+                            required
+                        >
+
+                        @error('first_name')
+
+                            <span class="field-error">
+                                {{ $message }}
+                            </span>
+
+                        @enderror
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="middle_name">
+                            Middle Name
+                            <span class="optional">
+                                Optional
+                            </span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="middle_name"
+                            name="middle_name"
+                            value="{{ old('middle_name') }}"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="last_name">
+                            Last Name *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="last_name"
+                            name="last_name"
+                            value="{{ old('last_name') }}"
+                            required
+                        >
+
+                        @error('last_name')
+
+                            <span class="field-error">
+                                {{ $message }}
+                            </span>
+
+                        @enderror
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="mobile_number">
+                            Mobile Number *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="mobile_number"
+                            name="mobile_number"
+                            value="{{ old('mobile_number') }}"
+                            placeholder="09123456789"
+                            required
+                        >
+
+                        @error('mobile_number')
+
+                            <span class="field-error">
+                                {{ $message }}
+                            </span>
+
+                        @enderror
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="date_of_birth">
+                            Date of Birth *
+                        </label>
+
+                        <input
+                            type="date"
+                            id="date_of_birth"
+                            name="date_of_birth"
+                            value="{{ old('date_of_birth') }}"
+                            required
+                        >
+
+                        @error('date_of_birth')
+
+                            <span class="field-error">
+                                {{ $message }}
+                            </span>
+
+                        @enderror
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="gender">
+                            Gender *
+                        </label>
+
+                        <select
+                            id="gender"
+                            name="gender"
+                            required
+                        >
+
+                            <option value="">
+                                Select gender
+                            </option>
+
+                            <option
+                                value="Male"
+                                @selected(old('gender') === 'Male')
+                            >
+                                Male
+                            </option>
+
+                            <option
+                                value="Female"
+                                @selected(old('gender') === 'Female')
+                            >
+                                Female
+                            </option>
+
+                            <option
+                                value="Other"
+                                @selected(old('gender') === 'Other')
+                            >
+                                Other
+                            </option>
+
+                        </select>
+
+                        @error('gender')
+
+                            <span class="field-error">
+                                {{ $message }}
+                            </span>
+
+                        @enderror
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ACADEMIC INFORMATION -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <span class="section-number">
+                        02
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Academic Information
+                        </h2>
+
+                        <p>
+                            Student program and year level.
                         </p>
 
-                    @enderror
+                    </div>
 
                 </div>
 
 
-                <!-- First Name -->
+                <div class="form-grid">
 
-                <div>
+                    <div class="form-group">
 
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        <label for="program">
+                            Program *
+                        </label>
 
-                        First Name
+                        <select
+                            id="program"
+                            name="program"
+                            required
+                        >
 
+                            <option value="">
+                                Select program
+                            </option>
+
+                            <option
+                                value="BS Information Technology"
+                                @selected(old('program') === 'BS Information Technology')
+                            >
+                                BS Information Technology
+                            </option>
+
+                            <option
+                                value="BS Computer Science"
+                                @selected(old('program') === 'BS Computer Science')
+                            >
+                                BS Computer Science
+                            </option>
+
+                            <option
+                                value="BS Information Systems"
+                                @selected(old('program') === 'BS Information Systems')
+                            >
+                                BS Information Systems
+                            </option>
+
+                        </select>
+
+                        @error('program')
+
+                            <span class="field-error">
+                                {{ $message }}
+                            </span>
+
+                        @enderror
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="year_level">
+                            Year Level *
+                        </label>
+
+                        <select
+                            id="year_level"
+                            name="year_level"
+                            required
+                        >
+
+                            <option value="">
+                                Select year level
+                            </option>
+
+                            @foreach([
+                                '1st Year',
+                                '2nd Year',
+                                '3rd Year',
+                                '4th Year'
+                            ] as $year)
+
+                                <option
+                                    value="{{ $year }}"
+                                    @selected(old('year_level') === $year)
+                                >
+                                    {{ $year }}
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                        @error('year_level')
+
+                            <span class="field-error">
+                                {{ $message }}
+                            </span>
+
+                        @enderror
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ADDRESS -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <span class="section-number">
+                        03
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Contact Information
+                        </h2>
+
+                        <p>
+                            Student residential address.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="address">
+                        Complete Address *
                     </label>
 
-                    <input
-                        type="text"
-                        name="first_name"
-                        value="{{ old('first_name') }}"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                    >
+                    <textarea
+                        id="address"
+                        name="address"
+                        rows="5"
+                        placeholder="Enter complete address"
+                        required
+                    >{{ old('address') }}</textarea>
 
-                    @error('first_name')
+                    @error('address')
 
-                        <p class="mt-2 text-sm text-red-600">
-
+                        <span class="field-error">
                             {{ $message }}
-
-                        </p>
-
-                    @enderror
-
-                </div>
-
-
-                <!-- Middle Name -->
-
-                <div>
-
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
-
-                        Middle Name
-
-                        <span class="font-normal text-slate-400">
-
-                            Optional
-
                         </span>
 
-                    </label>
-
-                    <input
-                        type="text"
-                        name="middle_name"
-                        value="{{ old('middle_name') }}"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                    >
-
-                </div>
-
-
-                <!-- Last Name -->
-
-                <div>
-
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
-
-                        Last Name
-
-                    </label>
-
-                    <input
-                        type="text"
-                        name="last_name"
-                        value="{{ old('last_name') }}"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                    >
-
-                    @error('last_name')
-
-                        <p class="mt-2 text-sm text-red-600">
-
-                            {{ $message }}
-
-                        </p>
-
                     @enderror
 
                 </div>
 
+            </section>
 
-                <!-- Mobile -->
 
-                <div>
+            <!-- PROFILE PICTURE -->
 
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+            <section class="form-section">
 
-                        Mobile Number
+                <div class="section-heading">
 
-                    </label>
-
-                    <input
-                        type="text"
-                        name="mobile_number"
-                        value="{{ old('mobile_number') }}"
-                        placeholder="09123456789"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                    >
-
-                    @error('mobile_number')
-
-                        <p class="mt-2 text-sm text-red-600">
-
-                            {{ $message }}
-
-                        </p>
-
-                    @enderror
-
-                </div>
-
-
-                <!-- Date of Birth -->
-
-                <div>
-
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
-
-                        Date of Birth
-
-                    </label>
-
-                    <input
-                        type="date"
-                        name="date_of_birth"
-                        value="{{ old('date_of_birth') }}"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                    >
-
-                    @error('date_of_birth')
-
-                        <p class="mt-2 text-sm text-red-600">
-
-                            {{ $message }}
-
-                        </p>
-
-                    @enderror
-
-                </div>
-
-
-                <!-- Gender -->
-
-                <div>
-
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
-
-                        Gender
-
-                    </label>
-
-                    <select
-                        name="gender"
-                        class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                    >
-
-                        <option value="">
-
-                            Select gender
-
-                        </option>
-
-                        <option value="Male"
-                            @selected(old('gender') === 'Male')>
-
-                            Male
-
-                        </option>
-
-                        <option value="Female"
-                            @selected(old('gender') === 'Female')>
-
-                            Female
-
-                        </option>
-
-                        <option value="Other"
-                            @selected(old('gender') === 'Other')>
-
-                            Other
-
-                        </option>
-
-                    </select>
-
-                    @error('gender')
-
-                        <p class="mt-2 text-sm text-red-600">
-
-                            {{ $message }}
-
-                        </p>
-
-                    @enderror
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- Academic Information -->
-
-        <section class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-
-            <div class="border-b border-slate-200 px-6 py-5">
-
-                <div class="flex items-center gap-4">
-
-                    <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold">
-
-                        02
-
-                    </div>
-
-                    <div>
-
-                        <h3 class="font-bold text-slate-900">
-
-                            Academic Information
-
-                        </h3>
-
-                        <p class="text-sm text-slate-500">
-
-                            Student program and current year level.
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="p-6 grid md:grid-cols-2 gap-6">
-
-                <div>
-
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
-
-                        Program
-
-                    </label>
-
-                    <select
-                        name="program"
-                        class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                    >
-
-                        <option value="">
-
-                            Select program
-
-                        </option>
-
-                        <option value="BS Information Technology"
-                            @selected(old('program') === 'BS Information Technology')>
-
-                            BS Information Technology
-
-                        </option>
-
-                        <option value="BS Computer Science"
-                            @selected(old('program') === 'BS Computer Science')>
-
-                            BS Computer Science
-
-                        </option>
-
-                        <option value="BS Information Systems"
-                            @selected(old('program') === 'BS Information Systems')>
-
-                            BS Information Systems
-
-                        </option>
-
-                    </select>
-
-                    @error('program')
-
-                        <p class="mt-2 text-sm text-red-600">
-
-                            {{ $message }}
-
-                        </p>
-
-                    @enderror
-
-                </div>
-
-
-                <div>
-
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
-
-                        Year Level
-
-                    </label>
-
-                    <select
-                        name="year_level"
-                        class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                    >
-
-                        <option value="">
-
-                            Select year level
-
-                        </option>
-
-                        <option value="1st Year"
-                            @selected(old('year_level') === '1st Year')>
-
-                            1st Year
-
-                        </option>
-
-                        <option value="2nd Year"
-                            @selected(old('year_level') === '2nd Year')>
-
-                            2nd Year
-
-                        </option>
-
-                        <option value="3rd Year"
-                            @selected(old('year_level') === '3rd Year')>
-
-                            3rd Year
-
-                        </option>
-
-                        <option value="4th Year"
-                            @selected(old('year_level') === '4th Year')>
-
-                            4th Year
-
-                        </option>
-
-                    </select>
-
-                    @error('year_level')
-
-                        <p class="mt-2 text-sm text-red-600">
-
-                            {{ $message }}
-
-                        </p>
-
-                    @enderror
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- Address -->
-
-        <section class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-
-            <div class="border-b border-slate-200 px-6 py-5">
-
-                <div class="flex items-center gap-4">
-
-                    <div class="w-10 h-10 rounded-xl bg-slate-700 text-white flex items-center justify-center font-bold">
-
-                        03
-
-                    </div>
-
-                    <div>
-
-                        <h3 class="font-bold text-slate-900">
-
-                            Contact Information
-
-                        </h3>
-
-                        <p class="text-sm text-slate-500">
-
-                            Student residential address.
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="p-6">
-
-                <label class="block text-sm font-semibold text-slate-700 mb-2">
-
-                    Complete Address
-
-                </label>
-
-                <textarea
-                    name="address"
-                    rows="4"
-                    placeholder="Enter complete address"
-                    class="w-full resize-none rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                >{{ old('address') }}</textarea>
-
-                @error('address')
-
-                    <p class="mt-2 text-sm text-red-600">
-
-                        {{ $message }}
-
-                    </p>
-
-                @enderror
-
-            </div>
-
-        </section>
-
-
-        <!-- Profile Picture -->
-
-        <section class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-
-            <div class="border-b border-slate-200 px-6 py-5">
-
-                <div class="flex items-center gap-4">
-
-                    <div class="w-10 h-10 rounded-xl bg-green-600 text-white flex items-center justify-center font-bold">
-
+                    <span class="section-number">
                         04
-
-                    </div>
+                    </span>
 
                     <div>
 
-                        <h3 class="font-bold text-slate-900">
-
+                        <h2>
                             Profile Picture
+                        </h2>
 
-                        </h3>
-
-                        <p class="text-sm text-slate-500">
-
-                            JPG, JPEG, or PNG · Maximum file size: 2MB
-
+                        <p>
+                            JPG, JPEG, or PNG · Maximum size: 2MB
                         </p>
 
                     </div>
 
                 </div>
 
-            </div>
 
+                <div class="upload-layout">
 
-            <div class="p-6">
+                    <div class="image-preview">
 
-                <div class="flex flex-col md:flex-row gap-6 items-center">
-
-                    <div
-                        id="imagePreviewContainer"
-                        class="w-32 h-32 rounded-2xl bg-slate-100 border-2 border-dashed border-slate-300 flex items-center justify-center overflow-hidden"
-                    >
-
-                        <span id="imagePlaceholder"
-                              class="text-slate-400 text-sm text-center px-4">
-
+                        <span id="imagePlaceholder">
                             Image Preview
-
                         </span>
 
                         <img
                             id="imagePreview"
-                            class="hidden w-full h-full object-cover"
+                            src=""
+                            alt="Selected profile preview"
+                            class="hidden"
                         >
 
                     </div>
 
 
-                    <div class="flex-1 w-full">
+                    <div class="upload-control">
+
+                        <label
+                            for="profile_picture"
+                            class="upload-label"
+                        >
+
+                            <span>
+                                Choose Profile Picture
+                            </span>
+
+                            <small>
+                                or drag an image into this area
+                            </small>
+
+                        </label>
+
 
                         <input
                             type="file"
-                            name="profile_picture"
                             id="profile_picture"
+                            name="profile_picture"
                             accept=".jpg,.jpeg,.png"
-                            class="block w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm"
+                            required
                         >
+
+                        <p
+                            id="fileName"
+                            class="file-name"
+                        >
+                            No file selected
+                        </p>
+
 
                         @error('profile_picture')
 
-                            <p class="mt-2 text-sm text-red-600">
-
+                            <span class="field-error">
                                 {{ $message }}
-
-                            </p>
+                            </span>
 
                         @enderror
-
-                        <p class="mt-3 text-sm text-slate-500">
-
-                            Upload a clear student profile photograph.
-
-                        </p>
 
                     </div>
 
                 </div>
 
+            </section>
+
+
+            <div class="form-actions">
+
+                <a
+                    href="{{ route('students.index') }}"
+                    class="btn btn-secondary"
+                >
+                    Cancel
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="submitButton"
+                >
+                    Register Student
+                </button>
+
             </div>
 
-        </section>
+        </form>
 
+    </div>
 
-        <!-- Actions -->
-
-        <div class="flex flex-col-reverse sm:flex-row justify-end gap-3 pb-10">
-
-            <a
-                href="{{ route('students.index') }}"
-                class="inline-flex justify-center rounded-xl border border-slate-300 bg-white px-6 py-3 font-semibold text-slate-700 transition hover:bg-slate-50"
-            >
-
-                Cancel
-
-            </a>
-
-
-            <button
-                type="submit"
-                class="inline-flex justify-center rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white shadow-sm transition hover:bg-blue-700 hover:shadow-md"
-            >
-
-                Register Student
-
-            </button>
-
-        </div>
-
-    </form>
-
-</div>
-
-
-<script>
-
-const profilePicture = document.getElementById('profile_picture');
-const imagePreview = document.getElementById('imagePreview');
-const imagePlaceholder = document.getElementById('imagePlaceholder');
-
-profilePicture.addEventListener('change', function(event) {
-
-    const file = event.target.files[0];
-
-    if (!file) {
-        return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onload = function(e) {
-
-        imagePreview.src = e.target.result;
-
-        imagePreview.classList.remove('hidden');
-
-        imagePlaceholder.classList.add('hidden');
-
-    };
-
-    reader.readAsDataURL(file);
-
-});
-
-</script>
+</section>
 
 @endsection

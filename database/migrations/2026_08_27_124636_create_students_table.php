@@ -10,32 +10,43 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::create('students', function (Blueprint $table) {
-        $table->id();
+    {
+        Schema::create('students', function (Blueprint $table) {
+            $table->id();
 
-        $table->string('student_id')->unique();
-        $table->string('first_name', 100);
-        $table->string('middle_name', 100)->nullable();
-        $table->string('last_name', 100);
+            // Student Identification
+            $table->string('student_id')->unique();
 
-        $table->string('email')->unique();
-        $table->string('mobile_number', 20);
+            // Personal Information
+            $table->string('first_name');
+            $table->string('middle_name')->nullable();
+            $table->string('last_name');
 
-        $table->enum('gender', ['Male', 'Female', 'Other']);
+            // Contact & Demographic Information
+            $table->string('email')->unique();
+            $table->string('mobile_number');
+            $table->date('date_of_birth');
+            $table->enum('gender', [
+                'Male',
+                'Female',
+                'Other'
+            ]);
 
-        $table->date('date_of_birth');
+            // Academic Information
+            $table->string('program');
+            $table->string('year_level');
 
-        $table->string('program');
-        $table->string('year_level');
+            // Residential & Profile
+            $table->text('address');
+            $table->string('profile_picture');
 
-        $table->text('address');
+            $table->timestamps();
+        });
+    }
 
-        $table->string('profile_picture');
-
-        $table->timestamps();
-    });
-}
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('students');
