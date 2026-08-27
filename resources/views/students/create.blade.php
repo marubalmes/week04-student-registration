@@ -1,332 +1,752 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+@extends('layouts.app')
 
-    <meta charset="UTF-8">
+@section('title', 'Register Student | Student Registration System')
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+@section('content')
 
-    <title>Register Student</title>
+<div class="max-w-5xl mx-auto px-6 py-10">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Page Header -->
 
-</head>
-
-<body class="bg-gray-100 min-h-screen">
-
-<div class="max-w-4xl mx-auto px-6 py-10">
-
-    <div class="mb-6">
+    <div class="mb-10">
 
         <a href="{{ route('students.index') }}"
-           class="text-blue-600 hover:underline">
+           class="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-700">
 
-            ← Back to Students
+            ← Back to Student Directory
 
         </a>
 
-        <h1 class="text-3xl font-bold text-gray-800 mt-4">
-            Student Registration Form
-        </h1>
+        <div class="mt-5">
 
-        <p class="text-gray-500 mt-2">
-            Fill out the required information below.
-        </p>
+            <div class="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700">
+
+                New Registration
+
+            </div>
+
+            <h2 class="mt-4 text-4xl font-bold tracking-tight text-slate-900">
+
+                Register a Student
+
+            </h2>
+
+            <p class="mt-3 text-slate-500 max-w-2xl">
+
+                Complete the student information below. All required fields
+                will be validated before the registration is processed.
+
+            </p>
+
+        </div>
 
     </div>
 
+
+    <!-- Validation Errors -->
+
     @if ($errors->any())
 
-        <div class="bg-red-100 border border-red-300 text-red-700 px-5 py-4 rounded-lg mb-6">
+        <div class="mb-8 rounded-2xl border border-red-200 bg-red-50 p-5">
 
-            <h3 class="font-semibold mb-2">
-                Please correct the following errors:
-            </h3>
+            <div class="flex gap-4">
 
-            <ul class="list-disc list-inside">
+                <div>
 
-                @foreach ($errors->all() as $error)
+                    <h3 class="font-semibold text-red-800">
 
-                    <li>{{ $error }}</li>
+                        Please review the form
 
-                @endforeach
+                    </h3>
 
-            </ul>
+                    <p class="text-sm text-red-600 mt-1">
+
+                        Some information needs to be corrected before
+                        the student can be registered.
+
+                    </p>
+
+                    <ul class="mt-3 list-disc list-inside text-sm text-red-700">
+
+                        @foreach ($errors->all() as $error)
+
+                            <li>{{ $error }}</li>
+
+                        @endforeach
+
+                    </ul>
+
+                </div>
+
+            </div>
 
         </div>
 
     @endif
 
-    <form action="{{ route('students.store') }}"
-          method="POST"
-          enctype="multipart/form-data"
-          class="bg-white shadow-md rounded-xl p-8">
+
+    <form
+        action="{{ route('students.store') }}"
+        method="POST"
+        enctype="multipart/form-data"
+        class="space-y-8"
+    >
 
         @csrf
 
-        <h2 class="text-xl font-semibold mb-5">
-            Personal Information
-        </h2>
 
-        <div class="grid md:grid-cols-2 gap-5">
+        <!-- Personal Information -->
 
-            <div>
+        <section class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
 
-                <label class="block font-medium mb-2">
-                    Student ID
-                </label>
+            <div class="border-b border-slate-200 px-6 py-5">
 
-                <input
-                    type="text"
-                    name="student_id"
-                    value="{{ old('student_id') }}"
-                    class="w-full border rounded-lg px-4 py-3"
-                    required
-                >
+                <div class="flex items-center gap-4">
 
-            </div>
+                    <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold">
 
-            <div>
+                        01
 
-                <label class="block font-medium mb-2">
-                    Email Address
-                </label>
+                    </div>
 
-                <input
-                    type="email"
-                    name="email"
-                    value="{{ old('email') }}"
-                    class="w-full border rounded-lg px-4 py-3"
-                    required
-                >
+                    <div>
+
+                        <h3 class="font-bold text-slate-900">
+
+                            Personal Information
+
+                        </h3>
+
+                        <p class="text-sm text-slate-500">
+
+                            Basic identification and contact details.
+
+                        </p>
+
+                    </div>
+
+                </div>
 
             </div>
 
-            <div>
 
-                <label class="block font-medium mb-2">
-                    First Name
-                </label>
+            <div class="p-6 grid md:grid-cols-2 gap-6">
 
-                <input
-                    type="text"
-                    name="first_name"
-                    value="{{ old('first_name') }}"
-                    class="w-full border rounded-lg px-4 py-3"
-                    required
-                >
+
+                <!-- Student ID -->
+
+                <div>
+
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+
+                        Student ID
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="student_id"
+                        value="{{ old('student_id') }}"
+                        placeholder="e.g. 2026-0001"
+                        class="w-full rounded-xl border px-4 py-3 outline-none transition
+                        @error('student_id')
+                            border-red-400 bg-red-50
+                        @else
+                            border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100
+                        @enderror"
+                    >
+
+                    @error('student_id')
+
+                        <p class="mt-2 text-sm text-red-600">
+
+                            {{ $message }}
+
+                        </p>
+
+                    @enderror
+
+                </div>
+
+
+                <!-- Email -->
+
+                <div>
+
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+
+                        Email Address
+
+                    </label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        value="{{ old('email') }}"
+                        placeholder="student@example.com"
+                        class="w-full rounded-xl border px-4 py-3 outline-none transition
+                        @error('email')
+                            border-red-400 bg-red-50
+                        @else
+                            border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100
+                        @enderror"
+                    >
+
+                    @error('email')
+
+                        <p class="mt-2 text-sm text-red-600">
+
+                            {{ $message }}
+
+                        </p>
+
+                    @enderror
+
+                </div>
+
+
+                <!-- First Name -->
+
+                <div>
+
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+
+                        First Name
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="first_name"
+                        value="{{ old('first_name') }}"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    >
+
+                    @error('first_name')
+
+                        <p class="mt-2 text-sm text-red-600">
+
+                            {{ $message }}
+
+                        </p>
+
+                    @enderror
+
+                </div>
+
+
+                <!-- Middle Name -->
+
+                <div>
+
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+
+                        Middle Name
+
+                        <span class="font-normal text-slate-400">
+
+                            Optional
+
+                        </span>
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="middle_name"
+                        value="{{ old('middle_name') }}"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    >
+
+                </div>
+
+
+                <!-- Last Name -->
+
+                <div>
+
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+
+                        Last Name
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="last_name"
+                        value="{{ old('last_name') }}"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    >
+
+                    @error('last_name')
+
+                        <p class="mt-2 text-sm text-red-600">
+
+                            {{ $message }}
+
+                        </p>
+
+                    @enderror
+
+                </div>
+
+
+                <!-- Mobile -->
+
+                <div>
+
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+
+                        Mobile Number
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="mobile_number"
+                        value="{{ old('mobile_number') }}"
+                        placeholder="09123456789"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    >
+
+                    @error('mobile_number')
+
+                        <p class="mt-2 text-sm text-red-600">
+
+                            {{ $message }}
+
+                        </p>
+
+                    @enderror
+
+                </div>
+
+
+                <!-- Date of Birth -->
+
+                <div>
+
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+
+                        Date of Birth
+
+                    </label>
+
+                    <input
+                        type="date"
+                        name="date_of_birth"
+                        value="{{ old('date_of_birth') }}"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    >
+
+                    @error('date_of_birth')
+
+                        <p class="mt-2 text-sm text-red-600">
+
+                            {{ $message }}
+
+                        </p>
+
+                    @enderror
+
+                </div>
+
+
+                <!-- Gender -->
+
+                <div>
+
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+
+                        Gender
+
+                    </label>
+
+                    <select
+                        name="gender"
+                        class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    >
+
+                        <option value="">
+
+                            Select gender
+
+                        </option>
+
+                        <option value="Male"
+                            @selected(old('gender') === 'Male')>
+
+                            Male
+
+                        </option>
+
+                        <option value="Female"
+                            @selected(old('gender') === 'Female')>
+
+                            Female
+
+                        </option>
+
+                        <option value="Other"
+                            @selected(old('gender') === 'Other')>
+
+                            Other
+
+                        </option>
+
+                    </select>
+
+                    @error('gender')
+
+                        <p class="mt-2 text-sm text-red-600">
+
+                            {{ $message }}
+
+                        </p>
+
+                    @enderror
+
+                </div>
 
             </div>
 
-            <div>
+        </section>
 
-                <label class="block font-medium mb-2">
-                    Middle Name
-                </label>
 
-                <input
-                    type="text"
-                    name="middle_name"
-                    value="{{ old('middle_name') }}"
-                    class="w-full border rounded-lg px-4 py-3"
-                >
+        <!-- Academic Information -->
 
-            </div>
+        <section class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
 
-            <div>
+            <div class="border-b border-slate-200 px-6 py-5">
 
-                <label class="block font-medium mb-2">
-                    Last Name
-                </label>
+                <div class="flex items-center gap-4">
 
-                <input
-                    type="text"
-                    name="last_name"
-                    value="{{ old('last_name') }}"
-                    class="w-full border rounded-lg px-4 py-3"
-                    required
-                >
+                    <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold">
 
-            </div>
+                        02
 
-            <div>
+                    </div>
 
-                <label class="block font-medium mb-2">
-                    Mobile Number
-                </label>
+                    <div>
 
-                <input
-                    type="text"
-                    name="mobile_number"
-                    value="{{ old('mobile_number') }}"
-                    class="w-full border rounded-lg px-4 py-3"
-                    required
-                >
+                        <h3 class="font-bold text-slate-900">
+
+                            Academic Information
+
+                        </h3>
+
+                        <p class="text-sm text-slate-500">
+
+                            Student program and current year level.
+
+                        </p>
+
+                    </div>
+
+                </div>
 
             </div>
 
-            <div>
 
-                <label class="block font-medium mb-2">
-                    Date of Birth
-                </label>
+            <div class="p-6 grid md:grid-cols-2 gap-6">
 
-                <input
-                    type="date"
-                    name="date_of_birth"
-                    value="{{ old('date_of_birth') }}"
-                    class="w-full border rounded-lg px-4 py-3"
-                    required
-                >
+                <div>
+
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+
+                        Program
+
+                    </label>
+
+                    <select
+                        name="program"
+                        class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    >
+
+                        <option value="">
+
+                            Select program
+
+                        </option>
+
+                        <option value="BS Information Technology"
+                            @selected(old('program') === 'BS Information Technology')>
+
+                            BS Information Technology
+
+                        </option>
+
+                        <option value="BS Computer Science"
+                            @selected(old('program') === 'BS Computer Science')>
+
+                            BS Computer Science
+
+                        </option>
+
+                        <option value="BS Information Systems"
+                            @selected(old('program') === 'BS Information Systems')>
+
+                            BS Information Systems
+
+                        </option>
+
+                    </select>
+
+                    @error('program')
+
+                        <p class="mt-2 text-sm text-red-600">
+
+                            {{ $message }}
+
+                        </p>
+
+                    @enderror
+
+                </div>
+
+
+                <div>
+
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+
+                        Year Level
+
+                    </label>
+
+                    <select
+                        name="year_level"
+                        class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    >
+
+                        <option value="">
+
+                            Select year level
+
+                        </option>
+
+                        <option value="1st Year"
+                            @selected(old('year_level') === '1st Year')>
+
+                            1st Year
+
+                        </option>
+
+                        <option value="2nd Year"
+                            @selected(old('year_level') === '2nd Year')>
+
+                            2nd Year
+
+                        </option>
+
+                        <option value="3rd Year"
+                            @selected(old('year_level') === '3rd Year')>
+
+                            3rd Year
+
+                        </option>
+
+                        <option value="4th Year"
+                            @selected(old('year_level') === '4th Year')>
+
+                            4th Year
+
+                        </option>
+
+                    </select>
+
+                    @error('year_level')
+
+                        <p class="mt-2 text-sm text-red-600">
+
+                            {{ $message }}
+
+                        </p>
+
+                    @enderror
+
+                </div>
 
             </div>
 
-            <div>
+        </section>
 
-                <label class="block font-medium mb-2">
-                    Gender
-                </label>
 
-                <select
-                    name="gender"
-                    class="w-full border rounded-lg px-4 py-3"
-                    required
-                >
+        <!-- Address -->
 
-                    <option value="">
-                        Select Gender
-                    </option>
+        <section class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
 
-                    <option value="Male"
-                        {{ old('gender') == 'Male' ? 'selected' : '' }}>
-                        Male
-                    </option>
+            <div class="border-b border-slate-200 px-6 py-5">
 
-                    <option value="Female"
-                        {{ old('gender') == 'Female' ? 'selected' : '' }}>
-                        Female
-                    </option>
+                <div class="flex items-center gap-4">
 
-                    <option value="Other"
-                        {{ old('gender') == 'Other' ? 'selected' : '' }}>
-                        Other
-                    </option>
+                    <div class="w-10 h-10 rounded-xl bg-slate-700 text-white flex items-center justify-center font-bold">
 
-                </select>
+                        03
 
-            </div>
+                    </div>
 
-        </div>
+                    <div>
 
-        <h2 class="text-xl font-semibold mt-8 mb-5">
-            Academic Information
-        </h2>
+                        <h3 class="font-bold text-slate-900">
 
-        <div class="grid md:grid-cols-2 gap-5">
+                            Contact Information
 
-            <div>
+                        </h3>
 
-                <label class="block font-medium mb-2">
-                    Program
-                </label>
+                        <p class="text-sm text-slate-500">
 
-                <select
-                    name="program"
-                    class="w-full border rounded-lg px-4 py-3"
-                    required
-                >
+                            Student residential address.
 
-                    <option value="">
-                        Select Program
-                    </option>
+                        </p>
 
-                    <option value="BS Information Technology"
-                        {{ old('program') == 'BS Information Technology' ? 'selected' : '' }}>
-                        BS Information Technology
-                    </option>
+                    </div>
 
-                    <option value="BS Computer Science"
-                        {{ old('program') == 'BS Computer Science' ? 'selected' : '' }}>
-                        BS Computer Science
-                    </option>
-
-                    <option value="BS Information Systems"
-                        {{ old('program') == 'BS Information Systems' ? 'selected' : '' }}>
-                        BS Information Systems
-                    </option>
-
-                </select>
+                </div>
 
             </div>
 
-            <div>
 
-                <label class="block font-medium mb-2">
-                    Year Level
+            <div class="p-6">
+
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+
+                    Complete Address
+
                 </label>
 
-                <select
-                    name="year_level"
-                    class="w-full border rounded-lg px-4 py-3"
-                    required
-                >
+                <textarea
+                    name="address"
+                    rows="4"
+                    placeholder="Enter complete address"
+                    class="w-full resize-none rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                >{{ old('address') }}</textarea>
 
-                    <option value="">
-                        Select Year Level
-                    </option>
+                @error('address')
 
-                    <option value="1st Year">1st Year</option>
-                    <option value="2nd Year">2nd Year</option>
-                    <option value="3rd Year">3rd Year</option>
-                    <option value="4th Year">4th Year</option>
+                    <p class="mt-2 text-sm text-red-600">
 
-                </select>
+                        {{ $message }}
+
+                    </p>
+
+                @enderror
 
             </div>
 
-        </div>
+        </section>
 
-        <div class="mt-6">
 
-            <label class="block font-medium mb-2">
-                Address
-            </label>
+        <!-- Profile Picture -->
 
-            <textarea
-                name="address"
-                rows="4"
-                class="w-full border rounded-lg px-4 py-3"
-                required
-            >{{ old('address') }}</textarea>
+        <section class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
 
-        </div>
+            <div class="border-b border-slate-200 px-6 py-5">
 
-        <div class="mt-6">
+                <div class="flex items-center gap-4">
 
-            <label class="block font-medium mb-2">
-                Profile Picture
-            </label>
+                    <div class="w-10 h-10 rounded-xl bg-green-600 text-white flex items-center justify-center font-bold">
 
-            <input
-                type="file"
-                name="profile_picture"
-                accept=".jpg,.jpeg,.png"
-                class="w-full border rounded-lg px-4 py-3"
-                required
+                        04
+
+                    </div>
+
+                    <div>
+
+                        <h3 class="font-bold text-slate-900">
+
+                            Profile Picture
+
+                        </h3>
+
+                        <p class="text-sm text-slate-500">
+
+                            JPG, JPEG, or PNG · Maximum file size: 2MB
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="p-6">
+
+                <div class="flex flex-col md:flex-row gap-6 items-center">
+
+                    <div
+                        id="imagePreviewContainer"
+                        class="w-32 h-32 rounded-2xl bg-slate-100 border-2 border-dashed border-slate-300 flex items-center justify-center overflow-hidden"
+                    >
+
+                        <span id="imagePlaceholder"
+                              class="text-slate-400 text-sm text-center px-4">
+
+                            Image Preview
+
+                        </span>
+
+                        <img
+                            id="imagePreview"
+                            class="hidden w-full h-full object-cover"
+                        >
+
+                    </div>
+
+
+                    <div class="flex-1 w-full">
+
+                        <input
+                            type="file"
+                            name="profile_picture"
+                            id="profile_picture"
+                            accept=".jpg,.jpeg,.png"
+                            class="block w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm"
+                        >
+
+                        @error('profile_picture')
+
+                            <p class="mt-2 text-sm text-red-600">
+
+                                {{ $message }}
+
+                            </p>
+
+                        @enderror
+
+                        <p class="mt-3 text-sm text-slate-500">
+
+                            Upload a clear student profile photograph.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Actions -->
+
+        <div class="flex flex-col-reverse sm:flex-row justify-end gap-3 pb-10">
+
+            <a
+                href="{{ route('students.index') }}"
+                class="inline-flex justify-center rounded-xl border border-slate-300 bg-white px-6 py-3 font-semibold text-slate-700 transition hover:bg-slate-50"
             >
 
-            <p class="text-sm text-gray-500 mt-2">
-                Accepted formats: JPG, JPEG, PNG. Maximum size: 2MB.
-            </p>
+                Cancel
 
-        </div>
+            </a>
 
-        <div class="mt-8">
 
             <button
                 type="submit"
-                class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-medium"
+                class="inline-flex justify-center rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white shadow-sm transition hover:bg-blue-700 hover:shadow-md"
             >
 
                 Register Student
@@ -339,5 +759,37 @@
 
 </div>
 
-</body>
-</html>
+
+<script>
+
+const profilePicture = document.getElementById('profile_picture');
+const imagePreview = document.getElementById('imagePreview');
+const imagePlaceholder = document.getElementById('imagePlaceholder');
+
+profilePicture.addEventListener('change', function(event) {
+
+    const file = event.target.files[0];
+
+    if (!file) {
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+
+        imagePreview.src = e.target.result;
+
+        imagePreview.classList.remove('hidden');
+
+        imagePlaceholder.classList.add('hidden');
+
+    };
+
+    reader.readAsDataURL(file);
+
+});
+
+</script>
+
+@endsection
